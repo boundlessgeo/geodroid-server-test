@@ -10,7 +10,7 @@ import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 
-public class ExtraMatchers {
+public class Extra {
     
     public static boolean isPNG(InputStream stream) {
         BufferedImage read = null;
