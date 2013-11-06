@@ -1,0 +1,37 @@
+report {
+    margin: 2em;
+}
+
+test, failure, name, elapsed {
+    display: block;
+}
+
+test {
+    border: 2px solid gray;
+    padding: 1em;
+    margin-bottom: 1em;
+}
+
+test > failure {
+    background: crimson;
+    display: block;
+}
+
+response {
+    display: block;
+    font-family: monospace;
+    margin: 1em 0;
+    white-space: pre;
+}
+
+elapsed:before {
+    content: "Elapsed time (ms): ";
+}
+
+name:before {
+    content: "Test Name: ";
+}
+
+img {
+    display: block;
+}

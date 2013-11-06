@@ -6,9 +6,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
+import static com.jayway.restassured.RestAssured.*;
+import com.jayway.restassured.specification.RequestSpecification;
 
 public class Extra {
     
@@ -25,17 +24,12 @@ public class Extra {
         return read != null;
     }
 
+    public static RequestSpecification givenWithReport() {
+        return given().filter(Reporter.reportResponseFilter()).filter(Reporter.reportRequestFilter());
+    }
 
-//    public static <T> Matcher<T> isPNG() {
-//        return new BaseMatcher<T>() {
-//
-//            public boolean matches(Object item) {
-//
-//            }
-//
-//            public void describeTo(Description description) {
-//                description.appendText("expected PNG, got something else");
-//            }
-//        };
-//    }
+    public static RequestSpecification givenWithRequestReport() {
+        return given().filter(Reporter.reportRequestFilter());
+    }
+
 }
