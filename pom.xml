@@ -4,7 +4,7 @@
 
     <groupId>org.opengeo</groupId>
     <artifactId>geodroid-server-testing</artifactId>
-    <version>0-SNAPSHOT</version>
+    <version>0.1</version>
     <packaging>jar</packaging>
 
     <name>geodroid-server-testing</name>
