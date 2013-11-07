@@ -38,6 +38,10 @@ public class Fixtures {
 
     @Test
     public void installData() throws Exception {
+        if (Config.getAdbCommand() == null) {
+            logger.warning("Skipping data installation. No ADB command specified");
+            return;
+        }
         List<File> toIntall = new ArrayList<File>();
         List<File> directories = new ArrayList<File>();
         directories.add(cache);

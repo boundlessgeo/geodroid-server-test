@@ -13,7 +13,6 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-//@SuiteClasses({TestRead.class, TestDataEndPoint.class, TestFeatureOutputPNG.class})
 @SuiteClasses({TestRead.class, TestData.class, TestDataEndPoint.class, TestFeatureOutputPNG.class, TestFeatureOutputJSON.class})
 public class TestSuite {
 
@@ -36,7 +35,9 @@ public class TestSuite {
             logger.info("installing fixture data");
             fixture.installData();
         }
-        ADB.adbCommand("shell", "am startservice --user 0 org.geodroid.server/.GeodroidServerService");
+        if (Config.getAdbCommand() != null) {
+            ADB.adbCommand("shell", "am startservice --user 0 org.geodroid.server/.GeodroidServerService");
+        }
         // pre-flight verify things are running
         HttpClient client = new DefaultHttpClient();
         HttpConnectionParams.setConnectionTimeout(client.getParams(), 2000);

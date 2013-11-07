@@ -65,7 +65,6 @@ public class Config {
     static void verify(Properties props) {
         String[][] expected = new String[][]{
             {PROP_BASE_URI, "The base URI where the server can be accessed"},
-            {PROP_ADB_COMMAND, "The system path to the adb command"},
         };
         List<String[]> messages = new ArrayList<String[]>();
         for (String[] prop : expected) {
