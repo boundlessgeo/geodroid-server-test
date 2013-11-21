@@ -116,9 +116,13 @@ public class Fixture {
                 DataSet.vector("roads_north_america")
                     .expectFeatureCount(1401)
             ),
-            DataSet.json("states")
-                .expectFeatureCount(49),
-            DataSet.mbtiles("geography")
+            DataSet.workspace("states",
+                DataSet.vector("states")
+                    .expectFeatureCount(49)
+            ),
+            DataSet.workspace("geography",
+                DataSet.mbtiles("geography")
+            )
         );
 
     }
