@@ -15,7 +15,7 @@ public class Main {
         JUnitCore c = new JUnitCore();
         c.addListener(new TextListener(System.out));
         c.addListener(new Reporter());
-        c.run(TestSuite.class);
+        c.run(FullTestSuite.class);
         InputStream stream = Main.class.getResourceAsStream("/report.css");
         IOUtils.copy(stream, new FileOutputStream("target/report.css"));
     }

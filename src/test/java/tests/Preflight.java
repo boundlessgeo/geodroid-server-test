@@ -8,13 +8,10 @@ import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.HttpConnectionParams;
 import org.junit.BeforeClass;
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-import org.junit.runners.Suite.SuiteClasses;
 
-@RunWith(Suite.class)
-@SuiteClasses({TestRead.class, TestData.class, TestDataEndPoint.class, TestFeatureOutputPNG.class, TestFeatureOutputJSON.class})
-public class TestSuite {
+public class Preflight {
+
+    static boolean ran = false;
 
     static void error(Throwable ex) {
         System.out.println("");
@@ -24,17 +21,11 @@ public class TestSuite {
         System.exit(1);
     }
 
-    @BeforeClass
-    public static void setUp() throws Exception {
+    static void preflight() throws Exception {
+        if (ran) return;
+        ran = true;
+        installData();
         Config.init();
-        if (Config.installData()) {
-            Fixtures fixture = new Fixtures();
-            Logger logger = Logger.getLogger("");
-            logger.info("downloading fixture data");
-            fixture.getData();
-            logger.info("installing fixture data");
-            fixture.installData();
-        }
         if (Config.getAdbCommand() != null) {
             ADB.adbCommand("shell", "am startservice --user 0 org.geodroid.server/.GeodroidServerService");
         }
@@ -51,4 +42,21 @@ public class TestSuite {
         }
     }
 
+    static void installData() throws Exception {
+        if (! Config.installData()) {
+            System.out.println("Skipping data installation as per configuration");
+            System.out.println("If any tests fail, try installing data and run again");
+            return;
+        }
+        Fixtures fixture = new Fixtures();
+        Logger logger = Logger.getLogger("");
+        logger.info("downloading fixture data");
+        fixture.getData();
+        logger.info("installing fixture data");
+        fixture.installData();
+    }
+
+    @BeforeClass
+    public static void setUp() throws Exception {
+    }
 }
