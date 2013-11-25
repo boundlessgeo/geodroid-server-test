@@ -65,7 +65,7 @@
                 <version>2.16</version>
                 <configuration>
                     <includes>
-                        <include>**/*TestSuite.java</include>
+                        <include>**/FullTestSuite.java</include>
                     </includes>
                     <testFailureIgnore>true</testFailureIgnore>
                     <properties>
