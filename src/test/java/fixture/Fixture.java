@@ -106,15 +106,18 @@ public class Fixture {
                 DataSet.vector("admin_1_states_provinces_lines_shp")
                     .expectFeatureCount(9),
                 DataSet.vector("parks_and_protected_lands_scale_rank")
-                    .expectFeatureCount(1),
+                    .expectFeatureCount(1)
+                    .associatedStyles("parks"),
                 DataSet.vector("lakes_north_america")
                     .expectFeatureCount(2),
                 DataSet.vector("urban_areas")
                     .expectFeatureCount(28),
                 DataSet.vector("populated_places")
-                    .expectFeatureCount(15),
+                    .expectFeatureCount(15)
+                    .associatedStyles("places"),
                 DataSet.vector("roads_north_america")
                     .expectFeatureCount(1401)
+                    .associatedStyles("roads")
             ),
             DataSet.workspace("states",
                 DataSet.vector("states")
@@ -122,6 +125,10 @@ public class Fixture {
             ),
             DataSet.workspace("geography",
                 DataSet.mbtiles("geography")
+            ),
+            DataSet.workspace("gun_deaths",
+                DataSet.vector("gun_deaths")
+                    .expectFeatureCount(99)
             )
         );
 

@@ -4,6 +4,7 @@ import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import static tests.Extra.givenWithRequestBodyReport;
 
 public class TestFeatureEdit {
 
@@ -23,7 +24,7 @@ public class TestFeatureEdit {
         String json = "{'type':'Feature','geometry':{'type':'Point','coordinates':[1.2,3.4]},"
                 + "'properties':{'NAMEASCII':'Hagersville','MIN_BBXMIN':42.42,'SCALERANK':42}}";
         
-        given().content(dequote(json))
+        givenWithRequestBodyReport().content(dequote(json))
             .expect().statusCode(200)
                 .put(route, params);
         

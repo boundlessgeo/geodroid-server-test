@@ -1,6 +1,6 @@
 package tests;
 
-import static com.jayway.restassured.RestAssured.given;
+import static tests.Extra.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,7 @@ public class TestFeatureOffsetLimit {
         for (int i = 0; i < ids.length; i++) {
             ids[i] = Integer.toString(offset + i + 1);
         }
-        given().queryParam("offset", offset).queryParam("limit", limit)
+        givenWithRequestReport().queryParam("offset", offset).queryParam("limit", limit)
             .expect()
                 .body("features", hasSize(limit))
                 .body("features.id", hasItems(ids))

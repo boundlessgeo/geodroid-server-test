@@ -63,7 +63,7 @@ public class Reporter extends RunListener {
         return new ResponseLoggingFilter(LogDetail.BODY, stream);
     }
 
-    public static Filter reportRequestFilter() {
+    public static Filter reportRequestFilter(final boolean logBody) {
         return new Filter() {
 
             @Override
@@ -76,8 +76,11 @@ public class Reporter extends RunListener {
                     }
                     url += "?" + URLEncodedUtils.format(kvp, "UTF-8");
                 }
-
-                instance.writer.request(url, requestSpec.getQueryParams());
+                String body = null;
+                if (logBody) {
+                    body = requestSpec.getBody().toString();
+                }
+                instance.writer.request(ctx.getRequestMethod().name(), url, requestSpec.getQueryParams(), body);
 
                 return ctx.next(requestSpec, responseSpec);
             }
@@ -189,20 +192,30 @@ public class Reporter extends RunListener {
             writer.writeEndElement();
         }
 
-        private void request(String url, Map<String, ?> queryParams) {
-            element("request", url);
+        private void request(String method, String url, Map<String, ?> queryParams, String body) {
+            start("request");
+            element("method", method);
+            element("url", url);
+            if (body != null) {
+                element("body", formatJSON(body));
+            }
+            end();
         }
 
-        private void response(String response) {
+        private String formatJSON(String json) {
             ObjectMapper mapper = new ObjectMapper();
             try {
-                Object readValue = mapper.readValue(response, Object.class);
+                Object readValue = mapper.readValue(json, Object.class);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 mapper.defaultPrettyPrintingWriter().writeValue(baos, readValue);
-                element("response", baos.toString());
+                return baos.toString();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
+        }
+
+        private void response(String response) {
+            element("response", formatJSON(response));
         }
 
         private void startReport() throws Exception {

@@ -25,11 +25,19 @@ public class Extra {
     }
 
     public static RequestSpecification givenWithReport() {
-        return given().filter(Reporter.reportResponseFilter()).filter(Reporter.reportRequestFilter());
+        return given().filter(Reporter.reportResponseFilter()).filter(Reporter.reportRequestFilter(false));
     }
 
     public static RequestSpecification givenWithRequestReport() {
-        return given().filter(Reporter.reportRequestFilter());
+        return given().filter(Reporter.reportRequestFilter(false));
+    }
+
+    public static RequestSpecification givenWithRequestBodyReport() {
+        return given().filter(Reporter.reportRequestFilter(true));
+    }
+
+    public static String dequote(String json) {
+        return json.replaceAll("'", "\"");
     }
 
 }

@@ -3,6 +3,7 @@ package tests;
 import static com.jayway.restassured.RestAssured.given;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import static tests.Extra.*;
 
 public class TestFeatureDelete {
 
@@ -20,7 +21,7 @@ public class TestFeatureDelete {
         };
         String route = "/features/{workspace}/{dataset}/{id}";
 
-        given()
+        givenWithRequestReport()
             .expect().statusCode(200)
                 .delete(route, params);
 

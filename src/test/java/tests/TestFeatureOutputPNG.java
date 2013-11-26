@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.io.IOUtils;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertEquals;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,30 +24,35 @@ import static tests.Extra.givenWithRequestReport;
 public class TestFeatureOutputPNG {
 
     private final DataSet dataSet;
+    private final String style;
 
     @BeforeClass
     public static void init() {
         Config.init();
     }
 
-    public TestFeatureOutputPNG(DataSet dataSet) {
+    public TestFeatureOutputPNG(DataSet dataSet, String style) {
         this.dataSet = dataSet;
+        this.style = style;
     }
 
     @Test
     public void run() throws Exception {
-        String route = dataSet.getParent() == null ?
-                "/features/{name}.png" : "/features/{parent}/{name}.png";
+        String route = style.length() == 0 ?
+                "/features/{parent}/{name}.png":
+                "/features/{parent}/{name}.png?style={style}";
         List<String> params = new ArrayList<String>();
-        if (dataSet.getParent() != null) {
-            params.add(dataSet.getParent().name);
-        }
+        params.add(dataSet.getParent().name);
         params.add(dataSet.name);
+        if (style.length() != 0) {
+            params.add(style);
+        }
         Response resp = givenWithRequestReport().get(route, params.toArray());
+        assertEquals(200, resp.getStatusCode());
         byte[] data = IOUtils.toByteArray(resp.asInputStream());
         assertTrue("Expected a PNG",
                 Extra.isPNG(new ByteArrayInputStream(data)));
-        File f = new File(String.format("target/images/TestFeatureOutputPNG-%s.png", dataSet.name));
+        File f = new File(String.format("target/images/TestFeatureOutputPNG-%s-%s.png", dataSet.name, style));
         Reporter.instance.writer.reportImage(f);
         f.getAbsoluteFile().getParentFile().mkdirs();
         FileOutputStream fout = new FileOutputStream(f);
@@ -54,11 +60,14 @@ public class TestFeatureOutputPNG {
         fout.close();
     }
 
-    @Parameterized.Parameters(name = "TestFeatureOutputPNG-{0}")
+    @Parameterized.Parameters(name = "TestFeatureOutputPNG-{0}-{1}")
     public static List<Object[]> data() {
         List<Object[]> data = new ArrayList<Object[]>();
         for (DataSet ds: Fixture.vectorDataSets()) {
-            data.add(new Object[] {ds});
+            data.add(new Object[] {ds, ""});
+            for (String style: ds.getAssociatedStyles()) {
+                data.add(new Object[]{ds, style});
+            }
         }
         return data;
     }

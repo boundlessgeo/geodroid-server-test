@@ -2,6 +2,7 @@ package tests;
 
 import java.io.File;
 import com.jayway.restassured.RestAssured;
+import com.jayway.restassured.parsing.Parser;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;

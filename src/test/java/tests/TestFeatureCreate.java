@@ -8,6 +8,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import static tests.Extra.*;
 
 public class TestFeatureCreate {
 
@@ -26,7 +27,7 @@ public class TestFeatureCreate {
         String json = "{'type':'Feature','geometry':{'type':'Point','coordinates':[6.7,8.9]},"
                 + "'properties':{'NAMEASCII':'Nowheresville','MIN_BBXMIN':42.42,'SCALERANK':42}}";
 
-        given().content(dequote(json))
+        givenWithRequestBodyReport().content(dequote(json))
             .expect().statusCode(201)
                 .post(route, params.toArray());
 
@@ -41,7 +42,4 @@ public class TestFeatureCreate {
                 .get(route, params.toArray());
     }
 
-    String dequote(String json) {
-        return json.replaceAll("'", "\"");
-    }
 }

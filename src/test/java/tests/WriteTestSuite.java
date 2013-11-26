@@ -5,7 +5,8 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({TestFeatureEdit.class, TestFeatureCreate.class, TestFeatureDelete.class})
+@Suite.SuiteClasses({TestSchemaCreate.class, TestFeatureEdit.class,
+    TestFeatureCreate.class, TestFeatureDelete.class})
 public class WriteTestSuite {
 
     @BeforeClass

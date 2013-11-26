@@ -17,7 +17,11 @@ test > failure {
     display: block;
 }
 
-response {
+method {
+    font-weight: bold;
+}
+
+response, body {
     display: block;
     font-family: monospace;
     margin: 1em 0;
@@ -34,4 +38,5 @@ name:before {
 
 img {
     display: block;
+    border: 1px solid black;
 }

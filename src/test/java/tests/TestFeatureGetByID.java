@@ -1,6 +1,6 @@
 package tests;
 
-import static com.jayway.restassured.RestAssured.given;
+import com.jayway.restassured.http.ContentType;
 import com.jayway.restassured.specification.RequestSpecification;
 import fixture.DataSet;
 import fixture.Fixture;
@@ -13,6 +13,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import static tests.Extra.*;
 
 @RunWith(value = Parameterized.class)
 public class TestFeatureGetByID {
@@ -30,8 +31,11 @@ public class TestFeatureGetByID {
 
     @Test
     public void run() throws IOException {
-        int id = new Random().nextInt(dataSet.getExpectedFeatureCount()) + 1;
-        RequestSpecification request = given().pathParams(
+        // select a random id - JSON seems to start w/ 0 and gpkg 1 so make sure
+        // this doesn't break things
+        int id = dataSet.getExpectedFeatureCount() == 1 ? 1 :
+            new Random().nextInt(dataSet.getExpectedFeatureCount() - 1) + 1;
+        RequestSpecification request = givenWithRequestReport().pathParams(
                 "workspace", dataSet.getParent().name,
                 "dataset", dataSet.name,
                 "id", Integer.toString(id));
@@ -39,6 +43,7 @@ public class TestFeatureGetByID {
         request.expect()
             .body("features", hasSize(1))
             .body("features.id", hasItems(Integer.toString(id)))
+            .statusCode(200)
                 .get(route);
     }
 
