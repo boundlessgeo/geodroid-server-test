@@ -12,9 +12,13 @@ test {
     margin-bottom: 1em;
 }
 
-test > failure {
-    background: crimson;
+failure {
+    border: 1px solid red;
     display: block;
+}
+
+failure:before {
+    content: "Test Failed:";
 }
 
 method {

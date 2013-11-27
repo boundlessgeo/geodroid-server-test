@@ -22,7 +22,9 @@ public class Preflight {
     }
 
     static void preflight() throws Exception {
-        if (ran) return;
+        if (ran) {
+            return;
+        }
         ran = true;
         installData();
         Config.init();
@@ -43,7 +45,7 @@ public class Preflight {
     }
 
     static void installData() throws Exception {
-        if (! Config.installData()) {
+        if (!Config.installData()) {
             System.out.println("Skipping data installation as per configuration");
             System.out.println("If any tests fail, try installing data and run again");
             return;

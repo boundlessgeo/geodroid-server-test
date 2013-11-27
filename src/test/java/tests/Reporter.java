@@ -24,6 +24,8 @@ import javax.xml.stream.XMLStreamWriter;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.ObjectWriter;
+import org.codehaus.jackson.util.DefaultPrettyPrinter;
 import org.junit.runner.Description;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
@@ -207,7 +209,12 @@ public class Reporter extends RunListener {
             try {
                 Object readValue = mapper.readValue(json, Object.class);
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                mapper.defaultPrettyPrintingWriter().writeValue(baos, readValue);
+                ObjectWriter writer = mapper.defaultPrettyPrintingWriter();
+                DefaultPrettyPrinter pprinter = new DefaultPrettyPrinter();
+                // make sure arrays get indented
+                pprinter.indentArraysWith(new DefaultPrettyPrinter.Lf2SpacesIndenter());
+                writer = writer.withPrettyPrinter(pprinter);
+                writer.writeValue(baos, readValue);
                 return baos.toString();
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
