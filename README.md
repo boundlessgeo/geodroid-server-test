@@ -43,9 +43,11 @@ Assuming the ANDROID_HOME environment variable is set:
 Building Executable Jar
 -----------------------
 
-`mvn compile assembly:single`
+`mvn install -DskipTests assembly:single`
 
-This will create a single executable jar w/ all dependencies in the `target` directory.
+The `-DskipTests` property is required to compile the tests without running 
+them. The above command will create a single executable jar w/ all dependencies 
+in the `target` directory. 
 
 Running The Executable Jar
 --------------------------
