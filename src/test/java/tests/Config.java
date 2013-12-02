@@ -43,21 +43,24 @@ public class Config {
     static Properties initProperties() {
         Properties defaults = new Properties();
         defaults.setProperty(PROP_PORT, "8000");
-        defaults.setProperty(PROP_DEVICE_GEODATA, "/sdcard/GeoData/");
+        defaults.setProperty(PROP_DEVICE_GEODATA, "/sdcard/Geodata/");
         defaults.setProperty(PROP_INSTALL_DATA, "true");
         defaults.setProperty("devicePath", "");
+
+        Properties user = new Properties(defaults);
 
         File config = getConfigFile();
         if (!config.exists()) {
             System.err.println("Unable to locate test properties file at " + config.getAbsolutePath());
         }
-        Properties user = new Properties(defaults);
-        try {
-            user.load(new FileReader(config));
-        } catch (IOException ex) {
-            System.err.println("Invalid properties format");
-            ex.printStackTrace();
-            System.exit(1);
+        else {
+            try {
+                user.load(new FileReader(config));
+            } catch (IOException ex) {
+                System.err.println("Invalid properties format");
+                ex.printStackTrace();
+                System.exit(1);
+            }
         }
 
         File adb = null;
