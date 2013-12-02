@@ -94,7 +94,7 @@ public class Fixture {
     }
 
     static {
-        Fixture.url("http://data.opengeo.org/geodroid/Geodata.zip",
+        Fixture.url("http://data.opengeo.org/geodroid/geodroid-test-data.zip",
             DataSet.workspace("ne1",
                 DataSet.tiles("tiles")
             ),
