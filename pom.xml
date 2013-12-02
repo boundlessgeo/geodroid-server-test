@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.opengeo</groupId>
-    <artifactId>geodroid-server-testing</artifactId>
+    <artifactId>geodroid-server-test</artifactId>
     <version>0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>geodroid-server-testing</name>
+    <name>geodroid-server-test</name>
     <url>http://maven.apache.org</url>
 
     <properties>
