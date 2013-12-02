@@ -20,7 +20,7 @@ public class TestSchemaCreate {
     @Test
     public void testSchemaCreatePut() {
         List params = new ArrayList(Arrays.asList(
-            "va",
+            "scratch",
             "widgets"
         ));
         String route = "/features/{workspace}/{dataset}";
@@ -31,7 +31,7 @@ public class TestSchemaCreate {
             .expect().statusCode(201)
                 .put(route, params.toArray());
 
-        route = "/data/va/widgets";
+        route = "/data/scratch/widgets";
         given().expect()
             .body("name", equalTo("widgets"))
             .body("schema.fid", equalTo("String"))
