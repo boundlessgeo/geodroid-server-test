@@ -25,7 +25,7 @@ public class TestRead {
     
     @Test
     public void testNotExisting() {
-        expect().body(is("not found : /data/foo")).when().get("/data/foo");
+        expect().body(is("No such workspace: foo")).when().get("/data/foo");
     }
 
 }
