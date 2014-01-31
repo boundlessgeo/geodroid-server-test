@@ -1,8 +1,10 @@
 package tests;
 
+import support.Reporter;
+import support.Extra;
 import com.jayway.restassured.response.Response;
-import fixture.DataSet;
-import fixture.Fixture;
+import support.DataSet;
+import support.Fixture;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -11,25 +13,20 @@ import java.util.List;
 import org.apache.commons.io.IOUtils;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import static tests.Extra.givenWithRequestReport;
+import support.BaseTest;
+import static support.Extra.givenWithRequestReport;
 
 /**
  *
  */
 @RunWith(value = Parameterized.class)
-public class TestFeatureOutputPNG {
+public class TestFeatureOutputPNG extends BaseTest {
 
     private final DataSet dataSet;
     private final String style;
-
-    @BeforeClass
-    public static void init() {
-        Config.init();
-    }
 
     public TestFeatureOutputPNG(DataSet dataSet, String style) {
         this.dataSet = dataSet;

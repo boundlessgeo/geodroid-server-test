@@ -1,7 +1,5 @@
-package tests;
+package support;
 
-import fixture.DataSet;
-import fixture.Fixture;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
@@ -11,7 +9,7 @@ import java.util.Map;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
-import static tests.Config.logger;
+import static support.Config.logger;
 
 /**
  * These are marked as 'tests' to allow quickly testing them.

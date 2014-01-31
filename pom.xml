@@ -19,19 +19,16 @@
             <groupId>com.jayway.restassured</groupId>
             <artifactId>rest-assured</artifactId>
             <version>1.8.1</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.11</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.4</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>net.java.dev.stax-utils</groupId>
@@ -43,7 +40,6 @@
                     <artifactId>jsr173-ri</artifactId>
                 </exclusion>
             </exclusions>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -71,7 +67,7 @@
                     <properties>
                         <property>
                           <name>listener</name>
-                          <value>tests.Reporter</value>
+                          <value>support.Reporter</value>
                         </property>
                     </properties>
                     <!--<forkCount>0</forkCount>-->

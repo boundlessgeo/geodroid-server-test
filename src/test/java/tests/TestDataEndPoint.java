@@ -1,30 +1,27 @@
 package tests;
 
+import support.Config;
 import com.jayway.restassured.specification.RequestSpecification;
 import com.jayway.restassured.specification.ResponseSpecification;
 import static org.hamcrest.Matchers.*;
-import fixture.DataSet;
-import fixture.Fixture;
+import support.DataSet;
+import support.Fixture;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import static tests.Extra.givenWithReport;
+import support.BaseTest;
+import static support.Extra.givenWithReport;
 
 /**
  *
  */
 @RunWith(value = Parameterized.class)
-public class TestDataEndPoint {
+public class TestDataEndPoint extends BaseTest {
     private final DataSet parent;
     private final DataSet child;
-
-    @BeforeClass
-    public static void init() {
-        Config.init();
-    }
 
     public TestDataEndPoint(DataSet parent, String child) {
         this.parent = parent;

@@ -1,23 +1,18 @@
 package tests;
 
-import static tests.Extra.*;
+import static support.Extra.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import static org.hamcrest.Matchers.*;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import support.BaseTest;
 
 @RunWith(value = Parameterized.class)
-public class TestFeatureOffsetLimit {
+public class TestFeatureOffsetLimit extends BaseTest {
 
-    @BeforeClass
-    public static void init() {
-        Config.init();
-    }
-    
     private final int offset;
     private final int limit;
 

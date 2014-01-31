@@ -6,16 +6,11 @@ import java.util.Arrays;
 import java.util.List;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import static tests.Extra.*;
+import support.BaseTest;
+import static support.Extra.*;
 
-public class TestFeatureCreate {
-
-    @BeforeClass
-    public static void init() {
-        Config.init();
-    }
+public class TestFeatureCreate extends BaseTest {
 
     @Test
     public void testEditJSON() {

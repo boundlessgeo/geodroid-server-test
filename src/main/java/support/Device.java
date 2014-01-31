@@ -1,11 +1,11 @@
-package tests;
+package support;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.Test;
-import static tests.Config.logger;
+import static support.Config.logger;
 
 
 /**

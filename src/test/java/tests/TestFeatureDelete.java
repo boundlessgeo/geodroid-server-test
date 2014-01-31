@@ -1,16 +1,11 @@
 package tests;
 
 import static com.jayway.restassured.RestAssured.given;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import static tests.Extra.*;
+import support.BaseTest;
+import static support.Extra.*;
 
-public class TestFeatureDelete {
-
-    @BeforeClass
-    public static void init() {
-        Config.init();
-    }
+public class TestFeatureDelete extends BaseTest {
 
     @Test
     public void testDelete() {

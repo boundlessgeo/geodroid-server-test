@@ -1,22 +1,17 @@
 package tests;
 
-import fixture.DataSet;
+import support.DataSet;
 import static com.jayway.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 import com.jayway.restassured.specification.ResponseSpecification;
-import fixture.Fixture;
-import org.junit.BeforeClass;
+import support.Fixture;
 import org.junit.Test;
+import support.BaseTest;
 
 /**
  *
  */
-public class TestData {
-
-    @BeforeClass
-    public static void init() {
-        Config.init();
-    }
+public class TestData extends BaseTest {
 
     @Test
     public void testData() {

@@ -2,29 +2,24 @@ package tests;
 
 import static com.jayway.restassured.RestAssured.*;
 import com.jayway.restassured.specification.RequestSpecification;
-import fixture.DataSet;
-import fixture.Fixture;
+import support.DataSet;
+import support.Fixture;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import static org.hamcrest.Matchers.*;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+import support.BaseTest;
 
 /**
  *
  */
 @RunWith(value = Parameterized.class)
-public class TestFeatureOutputJSON {
+public class TestFeatureOutputJSON extends BaseTest {
 
     private final DataSet dataSet;
-
-    @BeforeClass
-    public static void init() {
-        Config.init();
-    }
 
     public TestFeatureOutputJSON(DataSet dataSet) {
         this.dataSet = dataSet;

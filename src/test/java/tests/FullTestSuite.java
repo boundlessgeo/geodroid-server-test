@@ -1,5 +1,6 @@
 package tests;
 
+import support.Preflight;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;

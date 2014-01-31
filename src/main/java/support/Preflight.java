@@ -1,6 +1,7 @@
-package tests;
+package support;
 
 import java.util.logging.Logger;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.conn.ConnectTimeoutException;
@@ -21,7 +22,7 @@ public class Preflight {
         System.exit(1);
     }
 
-    static void preflight() throws Exception {
+    public static void preflight() throws Exception {
         if (ran) {
             return;
         }
@@ -29,7 +30,17 @@ public class Preflight {
         installData();
         Config.init();
         if (Config.getAdbCommand() != null) {
-            ADB.adbCommand("shell", "am startservice --user 0 org.geodroid.server/.GeodroidServerService");
+            Process start = ADB.adbCommand("shell", "am startservice --user 0 org.geodroid.server/.GeodroidServerService");
+            start.waitFor();
+            // waitFor will return 0 regardless
+            // need to check output from the command to see
+            String result = IOUtils.toString(start.getInputStream());
+            if (! result.startsWith("Starting service")) {
+                System.out.println("Failed to start the service, is it installed?");
+                System.out.println("Error message is: ");
+                System.out.println(result);
+                System.exit(1);
+            }
         }
         // pre-flight verify things are running
         HttpClient client = new DefaultHttpClient();
@@ -44,7 +55,7 @@ public class Preflight {
         }
     }
 
-    static void installData() throws Exception {
+    public static void installData() throws Exception {
         if (!Config.installData()) {
             System.out.println("Skipping data installation as per configuration");
             System.out.println("If any tests fail, try installing data and run again");
@@ -58,7 +69,4 @@ public class Preflight {
         fixture.installData();
     }
 
-    @BeforeClass
-    public static void setUp() throws Exception {
-    }
 }

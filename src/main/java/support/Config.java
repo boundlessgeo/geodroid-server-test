@@ -1,5 +1,6 @@
-package tests;
+package support;
 
+import support.ADB;
 import java.io.File;
 import com.jayway.restassured.RestAssured;
 import java.io.FileReader;
@@ -101,8 +102,9 @@ public class Config {
             Process netcfg = ADB.adbCommand("shell", "netcfg");
             listing = IOUtils.toString(netcfg.getInputStream());
         } catch (Exception ex) {
-            System.out.println("Unable to run netcfg command to determine IP address of device.");
+            System.out.println("Unable to run netcfg command to determine IP address of device. Verify the device.");
             System.out.println("Error is : " + ex.getMessage());
+            System.exit(1);
         }
         // gather any ifaces that are UP along with their IP
         Pattern p = Pattern.compile("(\\w+)\\s+UP\\s+([^/]+)");
@@ -140,7 +142,7 @@ public class Config {
         init();
     }
 
-    static void init() {
+    public static void init() {
         if (props == null) {
             props = initProperties();
             if (!detectDeviceIP()) {

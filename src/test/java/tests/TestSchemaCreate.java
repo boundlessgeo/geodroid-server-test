@@ -5,17 +5,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import static org.hamcrest.Matchers.equalTo;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import static tests.Extra.dequote;
-import static tests.Extra.givenWithRequestBodyReport;
+import support.BaseTest;
+import static support.Extra.dequote;
+import static support.Extra.givenWithRequestBodyReport;
 
-public class TestSchemaCreate {
-
-    @BeforeClass
-    public static void init() {
-        Config.init();
-    }
+public class TestSchemaCreate extends BaseTest {
 
     @Test
     public void testSchemaCreatePut() {

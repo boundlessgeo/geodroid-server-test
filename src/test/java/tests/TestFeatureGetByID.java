@@ -1,29 +1,23 @@
 package tests;
 
-import com.jayway.restassured.http.ContentType;
 import com.jayway.restassured.specification.RequestSpecification;
-import fixture.DataSet;
-import fixture.Fixture;
+import support.DataSet;
+import support.Fixture;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import static org.hamcrest.Matchers.*;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import static tests.Extra.*;
+import support.BaseTest;
+import static support.Extra.*;
 
 @RunWith(value = Parameterized.class)
-public class TestFeatureGetByID {
+public class TestFeatureGetByID extends BaseTest {
 
     private final DataSet dataSet;
-
-    @BeforeClass
-    public static void init() {
-        Config.init();
-    }
 
     public TestFeatureGetByID(DataSet dataSet) {
         this.dataSet = dataSet;

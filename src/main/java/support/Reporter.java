@@ -1,4 +1,4 @@
-package tests;
+package support;
 
 import com.jayway.restassured.filter.Filter;
 import com.jayway.restassured.filter.FilterContext;
@@ -37,11 +37,11 @@ import org.junit.runner.notification.RunListener;
 public class Reporter extends RunListener {
 
     static ByteArrayOutputStream currentReportFilterStream;
-    static Reporter instance;
+    public static Reporter instance;
     static String reportOutput = "target/report.xml";
     Pattern paramPattern = Pattern.compile("run\\[(.*)\\]");
     File outDir = new File("target/capture/");
-    ReportWriter writer = new ReportWriter(reportOutput);
+    public ReportWriter writer = new ReportWriter(reportOutput);
     String currentTestName;
     long time;
     Failure failure;
@@ -131,7 +131,7 @@ public class Reporter extends RunListener {
         time = System.currentTimeMillis();
     }
 
-    static class ReportWriter {
+    public static class ReportWriter {
 
         XMLStreamWriter writer;
 
@@ -188,7 +188,7 @@ public class Reporter extends RunListener {
             writer.writeEndElement();
         }
 
-        void reportImage(File f) throws XMLStreamException {
+        public void reportImage(File f) throws XMLStreamException {
             writer.writeStartElement("img");
             writer.writeAttribute("src", f.getPath().replace("target/", ""));
             writer.writeEndElement();

@@ -5,6 +5,7 @@ import java.io.InputStream;
 import org.apache.commons.io.IOUtils;
 import org.junit.internal.TextListener;
 import org.junit.runner.JUnitCore;
+import support.Reporter;
 
 /**
  *
@@ -15,7 +16,7 @@ public class Main {
         JUnitCore c = new JUnitCore();
         c.addListener(new TextListener(System.out));
         c.addListener(new Reporter());
-        c.run(FullTestSuite.class);
+        c.run(Class.forName("tests.FullTestSuite"));
         InputStream stream = Main.class.getResourceAsStream("/report.css");
         IOUtils.copy(stream, new FileOutputStream("target/report.css"));
     }

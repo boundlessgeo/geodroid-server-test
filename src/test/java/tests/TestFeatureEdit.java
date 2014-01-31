@@ -2,16 +2,11 @@ package tests;
 
 import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
-import org.junit.BeforeClass;
 import org.junit.Test;
-import static tests.Extra.givenWithRequestBodyReport;
+import support.BaseTest;
+import static support.Extra.givenWithRequestBodyReport;
 
-public class TestFeatureEdit {
-
-    @BeforeClass
-    public static void init() {
-        Config.init();
-    }
+public class TestFeatureEdit extends BaseTest {
 
     @Test
     public void testEditJSON() {

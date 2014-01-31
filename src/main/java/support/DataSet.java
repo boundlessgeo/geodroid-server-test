@@ -1,4 +1,4 @@
-package fixture;
+package support;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,7 +9,6 @@ import java.util.List;
 
 /**
  *
- * @author Ian Schneider <ischneider@opengeo.org>
  */
 public class DataSet {
     public final TopLevelType type;

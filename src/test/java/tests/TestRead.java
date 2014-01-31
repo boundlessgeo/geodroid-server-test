@@ -4,17 +4,12 @@ import org.junit.Test;
 import static com.jayway.restassured.RestAssured.*;
 import com.jayway.restassured.http.ContentType;
 import static org.hamcrest.Matchers.*;
-import org.junit.BeforeClass;
+import support.BaseTest;
 
 /**
  * Tests for non-data specific functionality
  */
-public class TestRead {
-
-    @BeforeClass
-    public static void init() {
-        Config.init();
-    }
+public class TestRead extends BaseTest {
 
     @Test
     public void testPing() {
