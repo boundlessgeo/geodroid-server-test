@@ -8,32 +8,30 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
 import org.junit.Test;
 import support.BaseTest;
-import static support.Extra.*;
+import support.Tests;
 
 public class TestFeatureCreate extends BaseTest {
 
     @Test
     public void testEditJSON() {
         List params = new ArrayList(Arrays.asList(
-            "va",
-            "populated_places"
+            "scratch",
+            "widgets"
         ));
         String route = "/features/{workspace}/{dataset}";
         String json = "{'type':'Feature','geometry':{'type':'Point','coordinates':[6.7,8.9]},"
-                + "'properties':{'NAMEASCII':'Nowheresville','MIN_BBXMIN':42.42,'SCALERANK':42}}";
+                + "'properties':{'name':'Nowheresville'}}";
 
-        givenWithRequestBodyReport().content(dequote(json))
+        tests.givenWithRequestBodyReport().content(dequote(json))
             .expect().statusCode(201)
                 .post(route, params.toArray());
 
         // until a returned id is available, we 'know' that it will be 16 :(
         route = route + "/{id}";
-        params.add(16);
+        params.add(1);
         given().expect()
             .body("features[0].geometry.coordinates", hasItems(6.7f, 8.9f))
-            .body("features[0].properties.NAMEASCII", equalTo("Nowheresville"))
-            .body("features[0].properties.MIN_BBXMIN", equalTo(42.42f))
-            .body("features[0].properties.SCALERANK", equalTo(42))
+            .body("features[0].properties.name", equalTo("Nowheresville"))
                 .get(route, params.toArray());
     }
 

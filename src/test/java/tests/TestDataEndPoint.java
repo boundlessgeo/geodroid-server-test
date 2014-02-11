@@ -1,19 +1,13 @@
 package tests;
 
-import support.Config;
-import com.jayway.restassured.specification.RequestSpecification;
-import com.jayway.restassured.specification.ResponseSpecification;
-import static org.hamcrest.Matchers.*;
 import support.DataSet;
-import support.Fixture;
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import support.BaseTest;
-import static support.Extra.givenWithReport;
+import support.Tests;
 
 /**
  *
@@ -31,34 +25,13 @@ public class TestDataEndPoint extends BaseTest {
 
     @Test
     public void run() {
-        RequestSpecification request = givenWithReport().pathParam("dataset", parent.name);
-        if (child == null) {
-            ResponseSpecification resp;
-            if (parent.type == DataSet.TopLevelType.WORKSPACE) {
-                resp = request.expect()
-                        .body("datasets", containsInAnyOrder(parent.childrenNames()));
-            } else {
-                resp = request.expect()
-                        .body("name", is(parent.name));
-                if (parent.getExpectedFeatureCount() != null) {
-                    resp.body("count", is(parent.getExpectedFeatureCount()));
-                }
-            }
-            resp.get("/data/{dataset}");
-        } else {
-            ResponseSpecification resp = request.pathParam("child", child.name).expect()
-                    .body("name", is(child.name));
-            if (child.getExpectedFeatureCount() != null) {
-                    resp.body("count", is(child.getExpectedFeatureCount()));
-            }
-            resp.get("/data/{dataset}/{child}");
-        }
+        tests.getDataEndPoint(parent, child);
     }
 
     @Parameterized.Parameters(name = "TestDataEndpoint-{0}{1}")
     public static List<Object[]> data() {
         List<Object[]> data = new ArrayList<Object[]>();
-        for (DataSet ds: Fixture.allDataSets()) {
+        for (DataSet ds: activeFixture().allDataSets()) {
             data.add(new Object[] {ds, ""});
             for (DataSet cs: ds.children) {
                 data.add(new Object[] {ds, "-" + cs.name});

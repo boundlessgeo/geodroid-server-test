@@ -1,18 +1,15 @@
 package tests;
 
-import com.jayway.restassured.specification.RequestSpecification;
 import support.DataSet;
-import support.Fixture;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import static org.hamcrest.Matchers.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import support.BaseTest;
-import static support.Extra.*;
+import support.Tests;
 
 @RunWith(value = Parameterized.class)
 public class TestFeatureGetByID extends BaseTest {
@@ -29,22 +26,13 @@ public class TestFeatureGetByID extends BaseTest {
         // this doesn't break things
         int id = dataSet.getExpectedFeatureCount() == 1 ? 1 :
             new Random().nextInt(dataSet.getExpectedFeatureCount() - 1) + 1;
-        RequestSpecification request = givenWithRequestReport().pathParams(
-                "workspace", dataSet.getParent().name,
-                "dataset", dataSet.name,
-                "id", Integer.toString(id));
-        String route = "/features/{workspace}/{dataset}/{id}";
-        request.expect()
-            .body("features", hasSize(1))
-            .body("features.id", hasItems(Integer.toString(id)))
-            .statusCode(200)
-                .get(route);
+        tests.getFeatureById(dataSet, id);
     }
 
     @Parameterized.Parameters(name = "TestFeatureGetByID-{0}")
     public static List<Object[]> data() {
         List<Object[]> data = new ArrayList<Object[]>();
-        for (DataSet ds: Fixture.vectorDataSets()) {
+        for (DataSet ds: activeFixture().vectorDataSets()) {
             if (ds.getExpectedFeatureCount() > 0) {
                 data.add(new Object[] {ds});
             }

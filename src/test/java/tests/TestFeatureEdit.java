@@ -4,34 +4,29 @@ import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 import org.junit.Test;
 import support.BaseTest;
-import static support.Extra.givenWithRequestBodyReport;
+import support.Tests;
 
 public class TestFeatureEdit extends BaseTest {
 
     @Test
     public void testEditJSON() {
         Object[] params = new String[]{
-            "va",
-            "populated_places",
-            "4"
+            "scratch",
+            "widgets",
+            "1"
         };
         String route = "/features/{workspace}/{dataset}/{id}";
         String json = "{'type':'Feature','geometry':{'type':'Point','coordinates':[1.2,3.4]},"
-                + "'properties':{'NAMEASCII':'Hagersville','MIN_BBXMIN':42.42,'SCALERANK':42}}";
+                + "'properties':{'name':'Elsewhereville'}}";
         
-        givenWithRequestBodyReport().content(dequote(json))
+        tests.givenWithRequestBodyReport().content(dequote(json))
             .expect().statusCode(200)
                 .put(route, params);
         
         given().expect()
             .body("features[0].geometry.coordinates", hasItems(1.2f, 3.4f))
-            .body("features[0].properties.NAMEASCII", equalTo("Hagersville"))
-            .body("features[0].properties.MIN_BBXMIN", equalTo(42.42f))
-            .body("features[0].properties.SCALERANK", equalTo(42))
+            .body("features[0].properties.name", equalTo("Elsewhereville"))
                 .get(route, params);
     }
 
-    String dequote(String json) {
-        return json.replaceAll("'", "\"");
-    }
 }

@@ -41,7 +41,7 @@ public class TestFeatureOutputJSON extends BaseTest {
     @Parameterized.Parameters(name = "TestFeatureOutputJSON-{0}")
     public static List<Object[]> data() {
         List<Object[]> data = new ArrayList<Object[]>();
-        for (DataSet ds: Fixture.vectorDataSets()) {
+        for (DataSet ds: activeFixture().vectorDataSets()) {
             data.add(new Object[] {ds});
         }
         return data;

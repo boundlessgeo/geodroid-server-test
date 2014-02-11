@@ -12,6 +12,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <include.tests>**/FullTestSuite.java</include.tests>
     </properties>
 
     <dependencies>
@@ -53,6 +54,22 @@
         </plugins>
     </reporting>
 
+    <profiles>
+        <profile>
+            <id>perf</id>
+            <properties>
+                <include.tests>**/PerfTestSuite.java</include.tests>
+            </properties>
+        </profile>
+        <profile>
+            <id>prof</id>
+            <properties>
+                <include.tests>**/ProfileTests.java</include.tests>
+            </properties>
+        </profile>
+    </profiles>
+
+
     <build>
         <plugins>
             <plugin>
@@ -61,13 +78,13 @@
                 <version>2.16</version>
                 <configuration>
                     <includes>
-                        <include>**/FullTestSuite.java</include>
+                        <include>${include.tests}</include>
                     </includes>
                     <testFailureIgnore>true</testFailureIgnore>
                     <properties>
                         <property>
                           <name>listener</name>
-                          <value>support.Reporter</value>
+                          <value>support.Listener</value>
                         </property>
                     </properties>
                     <!--<forkCount>0</forkCount>-->
@@ -111,30 +128,6 @@
                     </transformationSets>
                 </configuration>
             </plugin>-->
-            <plugin>
-                <artifactId>maven-resources-plugin</artifactId>
-                <version>2.6</version>
-                <executions>
-                    <execution>
-                        <id>copy-resources</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>copy-resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${basedir}/target/</outputDirectory>
-                            <resources>
-                                <resource>
-                                    <directory>src/main/resources</directory>
-                                    <includes>
-                                        <include>style.css</include>
-                                    </includes>
-                                </resource>
-                            </resources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>

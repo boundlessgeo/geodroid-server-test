@@ -7,8 +7,7 @@ import java.util.List;
 import static org.hamcrest.Matchers.equalTo;
 import org.junit.Test;
 import support.BaseTest;
-import static support.Extra.dequote;
-import static support.Extra.givenWithRequestBodyReport;
+import support.Tests;
 
 public class TestSchemaCreate extends BaseTest {
 
@@ -22,7 +21,7 @@ public class TestSchemaCreate extends BaseTest {
         String json = "{ 'type': 'schema', 'properties': { 'geometry': { 'type': 'Point', 'crs': 'epsg:4326' }, " +
             "'name': { 'type': 'string' }} }";
 
-        givenWithRequestBodyReport().content(dequote(json))
+        tests.givenWithRequestBodyReport().content(dequote(json))
             .expect().statusCode(201)
                 .put(route, params.toArray());
 

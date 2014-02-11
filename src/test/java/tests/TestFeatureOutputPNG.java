@@ -1,15 +1,17 @@
 package tests;
 
 import support.Reporter;
-import support.Extra;
 import com.jayway.restassured.response.Response;
+import java.awt.image.BufferedImage;
 import support.DataSet;
 import support.Fixture;
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageReader;
 import org.apache.commons.io.IOUtils;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
@@ -17,7 +19,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import support.BaseTest;
-import static support.Extra.givenWithRequestReport;
 
 /**
  *
@@ -44,23 +45,32 @@ public class TestFeatureOutputPNG extends BaseTest {
         if (style.length() != 0) {
             params.add(style);
         }
-        Response resp = givenWithRequestReport().get(route, params.toArray());
+        Response resp = tests.givenWithRequestReport().get(route, params.toArray());
         assertEquals(200, resp.getStatusCode());
         byte[] data = IOUtils.toByteArray(resp.asInputStream());
-        assertTrue("Expected a PNG",
-                Extra.isPNG(new ByteArrayInputStream(data)));
-        File f = new File(String.format("target/images/TestFeatureOutputPNG-%s-%s.png", dataSet.name, style));
-        Reporter.instance.writer.reportImage(f);
-        f.getAbsoluteFile().getParentFile().mkdirs();
-        FileOutputStream fout = new FileOutputStream(f);
-        fout.write(data);
-        fout.close();
+        assertTrue("Expected a PNG", isPNG(new ByteArrayInputStream(data)));
+        if (reporter != null) {
+            reporter.reportImage(String.format("TestFeatureOutputPNG-%s-%s.png", dataSet.name, style), data);
+        }
+    }
+
+    public static boolean isPNG(InputStream stream) {
+        BufferedImage read = null;
+        ImageReader reader = ImageIO.getImageReadersBySuffix("png").next();
+        try {
+            reader.setInput(ImageIO.createImageInputStream(stream));
+            read = reader.read(0);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            // not an image
+        }
+        return read != null;
     }
 
     @Parameterized.Parameters(name = "TestFeatureOutputPNG-{0}-{1}")
     public static List<Object[]> data() {
         List<Object[]> data = new ArrayList<Object[]>();
-        for (DataSet ds: Fixture.vectorDataSets()) {
+        for (DataSet ds: activeFixture().vectorDataSets()) {
             data.add(new Object[] {ds, ""});
             for (String style: ds.getAssociatedStyles()) {
                 data.add(new Object[]{ds, style});

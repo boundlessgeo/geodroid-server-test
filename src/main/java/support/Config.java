@@ -1,17 +1,21 @@
 package support;
 
-import support.ADB;
 import java.io.File;
 import com.jayway.restassured.RestAssured;
+import com.jayway.restassured.parsing.Parser;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Formatter;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.commons.io.IOUtils;
 
 /**
  *
@@ -25,9 +29,11 @@ public class Config {
     static final String PROP_DEVICE_GEODATA = "deviceGeoData";
     static final String PROP_GEODROID_PACKAGE = "geodroidPackage";
     static final String PROP_INSTALL_DATA = "installData";
+    static final String PROP_FIXTURE = "fixture";
 
     static Properties props;
-    public static final Logger logger = Logger.getLogger("");
+    public static final Logger logger = Logger.getLogger("geodroid");
+    private static Fixture activeFixture;
 
     static File getConfigFile() {
         File props = null;
@@ -41,7 +47,22 @@ public class Config {
         return props;
     }
 
-    static Properties initProperties() {
+    static void configureLogging() {
+        logger.setUseParentHandlers(false);
+        Handler h = new ConsoleHandler();
+        h.setLevel(Level.INFO);
+        h.setFormatter(new Formatter() {
+
+            @Override
+            public String format(LogRecord record) {
+                return record.getLevel() + " " + record.getMessage() + "\n";
+            }
+        });
+        logger.setLevel(Level.INFO);
+        logger.addHandler(h);
+    }
+
+    static void initProperties() {
         Properties defaults = new Properties();
         defaults.setProperty(PROP_PORT, "8000");
         defaults.setProperty(PROP_DEVICE_GEODATA, "/sdcard/Geodata/");
@@ -89,8 +110,25 @@ public class Config {
             System.exit(1);
         }
         defaults.put(PROP_ADB_COMMAND, adb.getAbsolutePath());
+        // allow environment overrides
+        for (Object k: user.keySet()) {
+            String env = System.getenv(k.toString());
+            if (env != null) {
+                System.out.println("override " + k + "=" + env);
+                user.put(k, env);
+            }
+        }
 
-        return user;
+        String fixture = user.getProperty(PROP_FIXTURE, "V2");
+        if ("V1".equals(fixture)) {
+            activeFixture = Fixture.V1;
+        } else if ("V2".equals(fixture)) {
+            activeFixture = Fixture.V2;
+        } else {
+            System.out.println("invalid fixture specifier : " + fixture);
+        }
+
+        props = user;
     }
 
     static boolean detectDeviceIP() {
@@ -99,10 +137,9 @@ public class Config {
         }
         String listing = null;
         try {
-            Process netcfg = ADB.adbCommand("shell", "netcfg");
-            listing = IOUtils.toString(netcfg.getInputStream());
+            listing = ADB.getOutput("shell", "netcfg");
         } catch (Exception ex) {
-            System.out.println("Unable to run netcfg command to determine IP address of device. Verify the device.");
+            System.out.println("Unable to run netcfg command to determine IP address of device. Verify the device is connected.");
             System.out.println("Error is : " + ex.getMessage());
             System.exit(1);
         }
@@ -139,12 +176,12 @@ public class Config {
     }
 
     static {
-        init();
+        initProperties();
+        configureLogging();
     }
 
     public static void init() {
-        if (props == null) {
-            props = initProperties();
+        if (props.getProperty(Config.PROP_BASE_URI) == null) {
             if (!detectDeviceIP()) {
                 System.out.println("Cannot detect the IP of the device, please provide the " + Config.PROP_BASE_URI + " property");
                 System.out.println("Or ensure the device is connected to the network.");
@@ -153,6 +190,10 @@ public class Config {
         }
         RestAssured.baseURI = props.getProperty(PROP_BASE_URI);
         RestAssured.port = Integer.parseInt(props.getProperty(PROP_PORT));
+    }
+
+    public static Fixture getActiveFixture() {
+        return activeFixture;
     }
 
     static String getAdbCommand() {
@@ -177,5 +218,9 @@ public class Config {
 
     static String getBaseURI() {
         return props.getProperty(PROP_BASE_URI) + ":" + props.getProperty(PROP_PORT);
+    }
+
+    static Logger getLogger() {
+        return logger;
     }
 }

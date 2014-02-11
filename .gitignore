@@ -1,4 +1,6 @@
 target
 cache
 test.properties
+test-reports
+profile-report
 

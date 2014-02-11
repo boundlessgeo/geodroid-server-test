@@ -1,17 +1,12 @@
 package tests;
 
-import support.Preflight;
-import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
+import support.BaseTest;
 
 @RunWith(Suite.class)
-@Suite.SuiteClasses({TestSchemaCreate.class, TestFeatureEdit.class,
-    TestFeatureCreate.class, TestFeatureDelete.class})
-public class WriteTestSuite {
+@Suite.SuiteClasses({TestSchemaCreate.class, TestFeatureCreate.class,
+   TestFeatureEdit.class, TestFeatureDelete.class})
+public class WriteTestSuite extends BaseTest {
 
-    @BeforeClass
-    public static void setUp() throws Exception {
-        Preflight.preflight();
-    }
 }

@@ -18,7 +18,7 @@ To run the tests, only the `ANDROID_HOME` environment variable is needed. This s
 Advanced Setup
 --------------
 
-The defaults can be modified using the `test.properties` file. This will be located in the working directory.
+The defaults can be modified using the `test.properties` file or via environment variables. The properties file should be in the project base directory or working directory.
 
 The following properties can be specified if needed:
 
@@ -30,7 +30,8 @@ The following properties can be specified if needed:
 Test Execution
 --------------
 
-The test suite will download the fixture data and copy it to the device. The suite will also ensure the service is running.
+The test suites will download the fixture data and copy it to the device. The suite will also ensure the service is running.
+Individual tests will skip the download and installation step and assume the correct data is present to facilitate faster execution.
 
 Running Tests via Maven
 -----------------------

@@ -1,6 +1,5 @@
 package tests;
 
-import static support.Extra.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import support.BaseTest;
+import support.Tests;
 
 @RunWith(value = Parameterized.class)
 public class TestFeatureOffsetLimit extends BaseTest {
@@ -28,7 +28,7 @@ public class TestFeatureOffsetLimit extends BaseTest {
         for (int i = 0; i < ids.length; i++) {
             ids[i] = Integer.toString(offset + i + 1);
         }
-        givenWithRequestReport().queryParam("offset", offset).queryParam("limit", limit)
+        tests.givenWithRequestReport().queryParam("offset", offset).queryParam("limit", limit)
             .expect()
                 .body("features", hasSize(limit))
                 .body("features.id", hasItems(ids))
