@@ -15,7 +15,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         JUnitCore c = new JUnitCore();
         c.addListener(new TextListener(System.out));
-        c.addListener(new Listener());
+        c.addListener(Listener.instance());
         String test = "tests.FullTestSuite";
         if (args.length == 1) {
             if ("test".equals(args[0])) {

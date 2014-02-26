@@ -81,13 +81,6 @@
                         <include>${include.tests}</include>
                     </includes>
                     <testFailureIgnore>true</testFailureIgnore>
-                    <properties>
-                        <property>
-                          <name>listener</name>
-                          <value>support.Listener</value>
-                        </property>
-                    </properties>
-                    <!--<forkCount>0</forkCount>-->
                 </configuration>
             </plugin>
             <plugin>

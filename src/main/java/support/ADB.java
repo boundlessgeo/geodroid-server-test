@@ -16,12 +16,14 @@ import static support.Config.logger;
 public class ADB {
 
     public static void pull(String src, String dest) throws Exception {
-        ADB.execute("pull", src, dest);
+        Process p = ADB.execute("pull", src, dest);
+        p.waitFor();
     }
 
     public static void startService(boolean restart) throws Exception {
         if (restart) {
-            ADB.execute("shell", "am force-stop org.geodroid.server");
+            Process p = ADB.execute("shell", "am force-stop org.geodroid.server");
+            p.waitFor();
         }
         String result = ADB.getOutput("shell", "am startservice --user 0 org.geodroid.server/.GeodroidServerService");
         // shell returns 0 regardless

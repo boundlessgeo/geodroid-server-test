@@ -6,6 +6,7 @@ import org.junit.runners.Suite.SuiteClasses;
 import support.BaseTest;
 
 @RunWith(Suite.class)
+//@RunWith(Runner.SuiteRunner.class)
 @SuiteClasses({TestRead.class, TestData.class, TestDataEndPoint.class,
     TestFeatureOutputPNG.class, TestFeatureOutputJSON.class,
     TestFeatureGetByID.class, TestFeatureOffsetLimit.class})

@@ -16,19 +16,21 @@ public class Listener extends RunListener {
     private static Listener instance;
     private final HashSet<RunListener> listeners = new HashSet<RunListener>();
 
-    public Listener() {
-        if (instance != null) {
-            throw new RuntimeException();
+    private Listener() {}
+
+    public static Listener instance() {
+        if (instance == null) {
+            instance = new Listener();
         }
-        instance = this;
+        return instance;
     }
 
     public static void register(RunListener listener) {
-        instance.listeners.add(listener);
+        instance().listeners.add(listener);
     }
 
     public static void unregister(RunListener listener) {
-        instance.listeners.remove(listener);
+        instance().listeners.remove(listener);
     }
 
     @Override

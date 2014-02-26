@@ -1,17 +1,10 @@
 package tests;
 
-import support.Reporter;
 import com.jayway.restassured.response.Response;
-import java.awt.image.BufferedImage;
 import support.DataSet;
-import support.Fixture;
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import javax.imageio.ImageIO;
-import javax.imageio.ImageReader;
 import org.apache.commons.io.IOUtils;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
@@ -19,6 +12,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import support.BaseTest;
+import static support.Tests.isPNG;
 
 /**
  *
@@ -52,19 +46,6 @@ public class TestFeatureOutputPNG extends BaseTest {
         if (reporter != null) {
             reporter.reportImage(String.format("TestFeatureOutputPNG-%s-%s.png", dataSet.name, style), data);
         }
-    }
-
-    public static boolean isPNG(InputStream stream) {
-        BufferedImage read = null;
-        ImageReader reader = ImageIO.getImageReadersBySuffix("png").next();
-        try {
-            reader.setInput(ImageIO.createImageInputStream(stream));
-            read = reader.read(0);
-        } catch (IOException ex) {
-            ex.printStackTrace();
-            // not an image
-        }
-        return read != null;
     }
 
     @Parameterized.Parameters(name = "TestFeatureOutputPNG-{0}-{1}")

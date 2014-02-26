@@ -1,5 +1,6 @@
 package tests;
 
+import com.jayway.restassured.RestAssured;
 import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -9,11 +10,14 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
+import org.junit.runner.RunWith;
 import support.ADB;
 import support.BaseTest;
 import support.Fixture;
 import support.Reporter;
+import support.Runner;
 
+@RunWith(Runner.BlockRunner.class)
 public class ProfileTests extends BaseTest {
 
     static String traceFile;
@@ -29,7 +33,6 @@ public class ProfileTests extends BaseTest {
             File trace = reporter.getFile(description.getMethodName() + ".trace");
             try {
                 ADB.pull(getDeviceTraceFile(), trace.getAbsolutePath());
-                System.out.println(trace.getPath());
             } catch (Exception ex) {
                 throw new RuntimeException(ex);
             }
@@ -49,6 +52,7 @@ public class ProfileTests extends BaseTest {
         }
         // it's very fast to do this on the device
         String output = ADB.getOutput("shell", "logcat -d -s dalvikvm:I | grep trace | tail -n 1");
+        // TRACE STARTED: '/mnt/sdcard/GeodroidServer.trace' 65536KB
         Matcher matcher = Pattern.compile("TRACE STARTED: '(.*)'").matcher(output);
         if (!matcher.find()) {
             throw new RuntimeException("Unable to locate trace file : " + output);
@@ -63,8 +67,6 @@ public class ProfileTests extends BaseTest {
         // enable tracing and restart
         ADB.execute("shell", "setprop", "log.tag.GeodroidServerTracing", "DEBUG");
         ADB.startService(true);
-        // wait for service?
-        Thread.sleep(500);
     }
 
     @AfterClass
@@ -75,7 +77,25 @@ public class ProfileTests extends BaseTest {
     }
 
     @Test
-    public void testGetFeatureByIdGeoPkg() throws Exception {
-        tests.getFeatureById(Fixture.VA_PLACES, 1);
+    public void testPerformanceGpkgPoints() throws Exception {
+        tests.getFeatures(Fixture.VA_PLACES, true);
+    }
+
+    @Test
+    public void testPerformanceGpkgMultiPoly() throws Exception {
+        tests.getFeatures(Fixture.VA_PARKS, true);
+    }
+
+    @Test
+    public void testPerformanceGpkgLine() throws Exception {
+        tests.getFeatures(Fixture.VA_ROADS, true);
+    }
+
+    @Test
+    public void testPerformanceTiles() throws Exception {
+        int z = 1;
+        int x = 1;
+        int y = 1;
+        tests.getTiles(Fixture.NE_TILES, z, x, y);
     }
 }

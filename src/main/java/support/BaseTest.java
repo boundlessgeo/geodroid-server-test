@@ -132,15 +132,8 @@ public class BaseTest {
      */
     public static class CollectGCLogs extends NeedsReporter {
 
-        private final PrintWriter writer;
-
         public CollectGCLogs(WithReporter with) {
             super(with);
-            try {
-                writer = new PrintWriter(reporter.getFile("gclog.log"));
-            } catch (FileNotFoundException ex) {
-                throw new RuntimeException(ex);
-            }
         }
 
         @Override
@@ -160,12 +153,17 @@ public class BaseTest {
         }
 
         private void reportStats(Description desc, Logcat stats) {
+            PrintWriter writer;
+            try {
+                writer = new PrintWriter(reporter.getFile(desc.getMethodName() + "-gclog.log"));
+            } catch (FileNotFoundException ex) {
+                throw new RuntimeException(ex);
+            }
             List<String> readLines = stats.readLines();
             writer.println(desc.getMethodName());
             for (String l: readLines) {
                 writer.println(l);
             }
-            writer.println();
             writer.flush();
         }
     }

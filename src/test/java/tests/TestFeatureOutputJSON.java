@@ -1,13 +1,9 @@
 package tests;
 
-import static com.jayway.restassured.RestAssured.*;
-import com.jayway.restassured.specification.RequestSpecification;
 import support.DataSet;
-import support.Fixture;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import static org.hamcrest.Matchers.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -27,15 +23,7 @@ public class TestFeatureOutputJSON extends BaseTest {
 
     @Test
     public void run() throws IOException {
-        RequestSpecification request = given().pathParam("dataset", dataSet.name);
-        String route = "/features/{dataset}";
-        if (dataSet.getParent() != null) {
-            route = "/features/{workspace}/{dataset}";
-            request.pathParam("workspace", dataSet.getParent().name);
-        }
-        request.expect()
-            .body("features", hasSize(dataSet.getExpectedFeatureCount()))
-            .get(route);
+        tests.getFeatures(dataSet, false);
     }
 
     @Parameterized.Parameters(name = "TestFeatureOutputJSON-{0}")

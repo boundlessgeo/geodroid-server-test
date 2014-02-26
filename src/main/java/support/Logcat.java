@@ -199,7 +199,6 @@ public class Logcat {
             if (lastGCLogTimestamp == null) {
                 lastGCLogTimestamp = lastLogMessageTimestamp(spec);
             }
-            System.out.println("last time stamp " + lastGCLogTimestamp);
             cat.setFilterToken("GC_CONCURRENT");
             cat.setLastTimeStamp(lastGCLogTimestamp);
             cat.start();
