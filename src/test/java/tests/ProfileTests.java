@@ -1,6 +1,5 @@
 package tests;
 
-import com.jayway.restassured.RestAssured;
 import java.io.File;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -14,6 +13,7 @@ import org.junit.runner.RunWith;
 import support.ADB;
 import support.BaseTest;
 import support.Fixture;
+import static support.Fixture.VA_ROADS;
 import support.Reporter;
 import support.Runner;
 
@@ -67,6 +67,10 @@ public class ProfileTests extends BaseTest {
         // enable tracing and restart
         ADB.execute("shell", "setprop", "log.tag.GeodroidServerTracing", "DEBUG");
         ADB.startService(true);
+
+        // let proj warm up and whack the trace file
+        tests.getFeatures(Fixture.VA_PLACES, true);
+        ADB.execute("shell", "rm", getDeviceTraceFile()).waitFor();
     }
 
     @AfterClass
@@ -97,5 +101,31 @@ public class ProfileTests extends BaseTest {
         int x = 1;
         int y = 1;
         tests.getTiles(Fixture.NE_TILES, z, x, y);
+    }
+
+    @Test
+    public void testPerformanceFeatureFullImage() throws Exception {
+        tests.getFeatureAsImage(VA_ROADS, VA_ROADS.getAssociatedStyles().get(0));
+    }
+
+    @Test
+    public void testPerformanceFeaturePartialImage1() throws Exception {
+        // 1023 features
+        tests.getFeatureAsImage(VA_ROADS, VA_ROADS.getAssociatedStyles().get(0),
+                "bbox", "-77.7759011555055,38.73029438222257,-74.64079463398436,41.865400903743705");
+    }
+
+    @Test
+    public void testPerformanceFeaturePartialImage2() throws Exception {
+        // 742 features
+        tests.getFeatureAsImage(VA_ROADS, VA_ROADS.getAssociatedStyles().get(0),
+                "bbox", "-77.7759011555,38.7302943822,-76.2083478947,40.297847643");
+    }
+
+    @Test
+    public void testPerformanceFeaturePartialImage3() throws Exception {
+        // 259
+        tests.getFeatureAsImage(VA_ROADS, VA_ROADS.getAssociatedStyles().get(0),
+                "bbox", "-77.7759011555,38.7302943822,-76.9921245251,39.5140710126");
     }
 }
