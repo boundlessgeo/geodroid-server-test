@@ -30,19 +30,7 @@ public class TestFeatureOutputPNG extends BaseTest {
 
     @Test
     public void run() throws Exception {
-        String route = style.length() == 0 ?
-                "/features/{parent}/{name}.png":
-                "/features/{parent}/{name}.png?style={style}";
-        List<String> params = new ArrayList<String>();
-        params.add(dataSet.getParent().name);
-        params.add(dataSet.name);
-        if (style.length() != 0) {
-            params.add(style);
-        }
-        Response resp = tests.givenWithRequestReport().get(route, params.toArray());
-        assertEquals(200, resp.getStatusCode());
-        byte[] data = IOUtils.toByteArray(resp.asInputStream());
-        assertTrue("Expected a PNG", isPNG(new ByteArrayInputStream(data)));
+        byte[] data = tests.getFeatureAsImage(dataSet, style);
         if (reporter != null) {
             reporter.reportImage(String.format("TestFeatureOutputPNG-%s-%s.png", dataSet.name, style), data);
         }

@@ -5,15 +5,21 @@ import com.jayway.restassured.response.Response;
 import com.jayway.restassured.specification.RequestSpecification;
 import com.jayway.restassured.specification.ResponseSpecification;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import javax.imageio.ImageIO;
 import javax.imageio.ImageReader;
-import static org.junit.Assert.assertTrue;
+import org.apache.commons.io.IOUtils;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasItems;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static support.BaseTest.tests;
 
 /**
  * Implementation of tests.
@@ -107,6 +113,32 @@ public class Tests {
                 .get(route);
         // hmm, hard to tell what we get back
         assertTrue(isJPEG(resp.asInputStream()));
+    }
+
+    public byte[] getFeatureAsImage(DataSet dataSet, String style, String... queryPairs) throws IOException {
+        // allow an empty style to signify none
+        String route = style == null || style.length() == 0
+                ? "/features/{parent}/{name}.png"
+                : "/features/{parent}/{name}.png?style={style}";
+        if (queryPairs.length > 0) {
+            if (route.indexOf('?') > 0) {
+                route += "&";
+            }
+            for (int i = 0; i < queryPairs.length; i+=2) {
+                route += queryPairs[i] + "=" + queryPairs[i+1];
+            }
+        }
+        List<String> params = new ArrayList<String>();
+        params.add(dataSet.getParent().name);
+        params.add(dataSet.name);
+        if (style.length() != 0) {
+            params.add(style);
+        }
+        Response resp = tests.givenWithRequestReport().get(route, params.toArray());
+        assertEquals(200, resp.getStatusCode());
+        byte[] data = IOUtils.toByteArray(resp.asInputStream());
+        assertTrue("Expected a PNG", isPNG(new ByteArrayInputStream(data)));
+        return data;
     }
 
     public static boolean isPNG(InputStream stream) {
