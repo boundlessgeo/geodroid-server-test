@@ -171,11 +171,13 @@ public class Fixture {
             OutputStream out = new FileOutputStream(localTarget);
             response.getEntity().writeTo(out);
             out.close();
-            extractData(localTarget, getUnpackDirectory());
         } else {
             logger.info("local data matches size of remote, skipping download");
         }
-
+        File unpackDirectory = getUnpackDirectory();
+        if (unpackDirectory.listFiles().length == 0) {
+            extractData(localTarget, unpackDirectory);
+        }
     }
 
     private void extractData(File srcZip, File targetDir) throws Exception {
