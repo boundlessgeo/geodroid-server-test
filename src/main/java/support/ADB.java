@@ -25,7 +25,7 @@ public class ADB {
             Process p = ADB.execute("shell", "am force-stop org.geodroid.server");
             p.waitFor();
         }
-        String result = ADB.getOutput("shell", "am startservice --user 0 org.geodroid.server/.GeodroidServerService");
+        String result = ADB.getOutput("shell", "am startservice org.geodroid.server/.GeodroidServerService");
         // shell returns 0 regardless
         // need to check output from the command to see
         if (!result.startsWith("Starting service")) {
