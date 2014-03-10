@@ -22,13 +22,13 @@ import java.util.regex.Pattern;
  */
 public class Config {
 
-    static final String PROP_BASE_URI = "baseURI";
+    static final String PROP_HOST = "host";
     static final String PROP_PORT = "port";
-    static final String PROP_ADB_COMMAND = "adbCommand";
-    static final String PROP_ADB_DEVICE = "adbDevice";
-    static final String PROP_DEVICE_GEODATA = "deviceGeoData";
-    static final String PROP_GEODROID_PACKAGE = "geodroidPackage";
-    static final String PROP_INSTALL_DATA = "installData";
+    static final String PROP_ADB_COMMAND = "adb";
+    static final String PROP_ADB_DEVICE = "device";
+    static final String PROP_DEVICE_GEODATA = "geodata";
+    static final String PROP_GEODROID_PACKAGE = "geodroid_package";
+    static final String PROP_INSTALL_DATA = "install_data";
     static final String PROP_FIXTURE = "fixture";
 
     static Properties props;
@@ -132,7 +132,7 @@ public class Config {
     }
 
     static boolean detectDeviceIP() {
-        if (props.getProperty(Config.PROP_BASE_URI) != null) {
+        if (props.getProperty(Config.PROP_HOST) != null) {
             return true;
         }
         String listing = null;
@@ -170,7 +170,7 @@ public class Config {
         }
         if (match != null) {
             System.out.println("Determined device IP as " + match);
-            props.setProperty(Config.PROP_BASE_URI, "http://" + match);
+            props.setProperty(Config.PROP_HOST, match);
         }
         return match != null;
     }
@@ -181,14 +181,14 @@ public class Config {
     }
 
     public static void init() {
-        if (props.getProperty(Config.PROP_BASE_URI) == null) {
+        if (props.getProperty(Config.PROP_HOST) == null) {
             if (!detectDeviceIP()) {
-                System.out.println("Cannot detect the IP of the device, please provide the " + Config.PROP_BASE_URI + " property");
+                System.out.println("Cannot detect the IP of the device, please provide the " + Config.PROP_HOST + " property");
                 System.out.println("Or ensure the device is connected to the network.");
                 System.exit(1);
             }
         }
-        RestAssured.baseURI = props.getProperty(PROP_BASE_URI);
+        RestAssured.baseURI = "http://"+props.getProperty(PROP_HOST);
         RestAssured.port = Integer.parseInt(props.getProperty(PROP_PORT));
     }
 
@@ -217,7 +217,7 @@ public class Config {
     }
 
     static String getBaseURI() {
-        return props.getProperty(PROP_BASE_URI) + ":" + props.getProperty(PROP_PORT);
+        return "http://"+props.getProperty(PROP_HOST) + ":" + props.getProperty(PROP_PORT);
     }
 
     static Logger getLogger() {
