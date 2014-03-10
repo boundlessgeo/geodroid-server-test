@@ -129,10 +129,10 @@ public class Fixture {
                     .expectFeatureCount(99)
             )
         );
-        V2 = Fixture.url("http://data.opengeo.org/geodroid/geodroid-test-data2.zip",
+        V2 = Fixture.url("http://data.boundlessgeo.com/mobile/geodroid-test-data-v2.zip",       
             NE1, VA, STATES, GEOGRAPHY, GUN_DEATHS,
-            MEDFORD_PARKS = DataSet.workspace("Medford_Parks",
-                    MEDFORD_PARKS_MEDFORD_PARKS = DataSet.vector("Medford_Parks").
+            MEDFORD_PARKS = DataSet.workspace("medford_parks",
+                    MEDFORD_PARKS_MEDFORD_PARKS = DataSet.vector("medford_parks").
                             expectFeatureCount(88)
             )
         );
