@@ -8,7 +8,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import support.BaseTest;
-import support.Tests;
 
 @RunWith(value = Parameterized.class)
 public class TestFeatureOffsetLimit extends BaseTest {

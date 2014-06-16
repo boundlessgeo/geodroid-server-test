@@ -136,6 +136,7 @@ public class Config {
             return true;
         }
         String listing = null;
+        System.out.println("Connecting to device...");
         try {
             listing = ADB.getOutput("shell", "netcfg");
         } catch (Exception ex) {

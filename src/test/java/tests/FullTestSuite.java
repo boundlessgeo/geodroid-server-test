@@ -6,8 +6,9 @@ import org.junit.ClassRule;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import support.BaseTest;
+import support.Runner;
 
-@RunWith(Suite.class)
+@RunWith(Runner.Suite.class)
 @Suite.SuiteClasses({ReadTestSuite.class, WriteTestSuite.class})
 public class FullTestSuite extends BaseTest {
 

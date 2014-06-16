@@ -23,7 +23,7 @@ public class TestFeatureOutputJSON extends BaseTest {
 
     @Test
     public void run() throws IOException {
-        tests.getFeatures(dataSet, false);
+        tests.getAllFeatures(dataSet, false);
     }
 
     @Parameterized.Parameters(name = "TestFeatureOutputJSON-{0}")

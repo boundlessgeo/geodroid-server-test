@@ -45,7 +45,13 @@ import org.junit.runner.notification.RunListener;
 public class Reporter extends RunListener {
 
     private static ByteArrayOutputStream currentReportFilterStream;
-    private static boolean recordResponses = true;
+    private Filter doNothingFilter = new Filter() {
+        @Override
+        public Response filter(FilterableRequestSpecification requestSpec, FilterableResponseSpecification responseSpec, FilterContext ctx) {
+            return ctx.next(requestSpec, responseSpec);
+        }
+    };
+    private boolean recordResponses = false;
     private Pattern paramPattern = Pattern.compile("run\\[(.*)\\]");
     private File captureDir;
     private ReportWriter writer;
@@ -104,14 +110,7 @@ public class Reporter extends RunListener {
 
     public Filter reportResponseFilter() {
         if (!recordResponses) {
-            return new Filter() {
-
-                @Override
-                public Response filter(FilterableRequestSpecification requestSpec, FilterableResponseSpecification responseSpec, FilterContext ctx) {
-                    return ctx.next(requestSpec, responseSpec);
-                }
-
-            };
+            return doNothingFilter;
         }
         if (currentReportFilterStream != null) {
             throw new RuntimeException();
@@ -122,6 +121,9 @@ public class Reporter extends RunListener {
     }
 
     public Filter reportRequestFilter(final boolean logBody) {
+        if (writer == null) {
+            return doNothingFilter;
+        }
         return new Filter() {
 
             @Override
@@ -156,6 +158,7 @@ public class Reporter extends RunListener {
     }
 
     public void reportImage(String name, byte[] data) {
+        if (writer == null) return;
         File f = new File(new File(baseDirectory, "report"), name);
         f.getAbsoluteFile().getParentFile().mkdirs();
         try {
@@ -214,6 +217,7 @@ public class Reporter extends RunListener {
     public void testStarted(Description description) throws Exception {
         // a test has started, default to xmlWriter
         if (writer == null) {
+            recordResponses = true;
             writer = getXMLWriter();
             writer.startReport();
         }

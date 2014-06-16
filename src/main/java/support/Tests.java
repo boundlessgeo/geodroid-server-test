@@ -19,6 +19,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static support.BaseTest.tests;
 
 /**
@@ -60,7 +61,16 @@ public class Tests {
                 .get(route);
     }
 
-    public Response getFeatures(DataSet dataSet, boolean report) {
+    public Response getAllFeatures(DataSet dataSet, boolean report) {
+        Response response = getFeatures(dataSet, report);
+        Object path = response.body().path("features");
+        if (!hasSize(dataSet.getExpectedFeatureCount()).matches(path)) {
+            fail("expected " + dataSet.getExpectedFeatureCount() + " got " + dataSet.getExpectedFeatureCount());
+        }
+        return response;
+    }
+
+    public Response getFeatures(DataSet dataSet, boolean report, String... queryPairs) {
         RequestSpecification request = report ? givenWithRequestReport() : given();
         request.pathParam("dataset", dataSet.name);
         String route = "/features/{dataset}";
@@ -68,9 +78,8 @@ public class Tests {
             route = "/features/{workspace}/{dataset}";
             request.pathParam("workspace", dataSet.getParent().name);
         }
-        return request.expect()
-            .body("features", hasSize(dataSet.getExpectedFeatureCount()))
-            .get(route);
+        route = addQuery(route, queryPairs);
+        return request.get(route);
     }
 
     public Response getDataEndPoint(DataSet parent, DataSet child) {
@@ -120,14 +129,7 @@ public class Tests {
         String route = style == null || style.length() == 0
                 ? "/features/{parent}/{name}.png"
                 : "/features/{parent}/{name}.png?style={style}";
-        if (queryPairs.length > 0) {
-            if (route.indexOf('?') > 0) {
-                route += "&";
-            }
-            for (int i = 0; i < queryPairs.length; i+=2) {
-                route += queryPairs[i] + "=" + queryPairs[i+1];
-            }
-        }
+        route = addQuery(route, queryPairs);
         List<String> params = new ArrayList<String>();
         params.add(dataSet.getParent().name);
         params.add(dataSet.name);
@@ -139,6 +141,52 @@ public class Tests {
         byte[] data = IOUtils.toByteArray(resp.asInputStream());
         assertTrue("Expected a PNG", isPNG(new ByteArrayInputStream(data)));
         return data;
+    }
+
+    public byte[] getWMSImage(String srs, String style, String bbox, int width, int height, DataSet... dataSets) throws IOException {
+        String route = "/wms?SERVICE=WMS&FORMAT=image/png&VERSION=1.3.0&REQUEST=GetMap";
+        String layers = "";
+        for (DataSet ds: dataSets) {
+            layers += ds.getParent().name + ":" + ds.name + ",";
+        }
+        layers = layers.substring(0, layers.length() - 1);
+        route = addQuery(route, "SRS", srs, "STYLES", style == null ? "" : style,
+                         "BBOX", bbox, "WIDTH", width, "HEIGHT", height,
+                         "LAYERS", layers);
+        Response resp = tests.givenWithRequestReport().get(route);
+        assertEquals(200, resp.getStatusCode());
+        byte[] data = IOUtils.toByteArray(resp.asInputStream());
+        assertTrue("Expected a PNG", isPNG(new ByteArrayInputStream(data)));
+        StringBuilder buf = new StringBuilder("wms-");
+        for (int i = 0; i < dataSets.length; i++) {
+            buf.append(dataSets[i].name).append('-');
+        }
+        buf.append(srs).append('-');
+        buf.append(width).append('x').append(height).append('-');
+        buf.append(bbox.replace(',', '_'));
+        if (style != null) {
+            buf.append('-').append(style.replace(",", "_"));
+        }
+        buf.append(".png");
+        reporter.reportImage(buf.toString(), data);
+        return data;
+    }
+
+    static String addQuery(String route, Object... queryPairs) {
+        if (queryPairs.length > 0) {
+            if (route.indexOf('?') > 0) {
+                route += "&";
+            } else {
+                route += "?";
+            }
+            for (int i = 0; i < queryPairs.length; i+=2) {
+                route += queryPairs[i] + "=" + queryPairs[i+1];
+                if (i + 2 < queryPairs.length) {
+                    route += "&";
+                }
+            }
+        }
+        return route;
     }
 
     public static boolean isPNG(InputStream stream) {

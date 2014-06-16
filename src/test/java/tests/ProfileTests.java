@@ -1,6 +1,7 @@
 package tests;
 
 import java.io.File;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.junit.AfterClass;
@@ -17,7 +18,7 @@ import static support.Fixture.VA_ROADS;
 import support.Reporter;
 import support.Runner;
 
-@RunWith(Runner.BlockRunner.class)
+@RunWith(Runner.Block.class)
 public class ProfileTests extends BaseTest {
 
     static String traceFile;
@@ -51,7 +52,8 @@ public class ProfileTests extends BaseTest {
             return traceFile;
         }
         // it's very fast to do this on the device
-        String output = ADB.getOutput("shell", "logcat -d -s dalvikvm:I | grep trace | tail -n 1");
+        List<String> lines = ADB.getOutputLines("shell", "logcat -d -s dalvikvm:I | grep trace");
+        String output = lines.get(lines.size() - 1);
         // TRACE STARTED: '/mnt/sdcard/GeodroidServer.trace' 65536KB
         Matcher matcher = Pattern.compile("TRACE STARTED: '(.*)'").matcher(output);
         if (!matcher.find()) {
@@ -69,7 +71,7 @@ public class ProfileTests extends BaseTest {
         ADB.startService(true);
 
         // let proj warm up and whack the trace file
-        tests.getFeatures(Fixture.VA_PLACES, true);
+        tests.getAllFeatures(Fixture.VA_PLACES, true);
         ADB.execute("shell", "rm", getDeviceTraceFile()).waitFor();
     }
 
@@ -82,17 +84,17 @@ public class ProfileTests extends BaseTest {
 
     @Test
     public void testPerformanceGpkgPoints() throws Exception {
-        tests.getFeatures(Fixture.VA_PLACES, true);
+        tests.getAllFeatures(Fixture.VA_PLACES, true);
     }
 
     @Test
     public void testPerformanceGpkgMultiPoly() throws Exception {
-        tests.getFeatures(Fixture.VA_PARKS, true);
+        tests.getAllFeatures(Fixture.VA_PARKS, true);
     }
 
     @Test
     public void testPerformanceGpkgLine() throws Exception {
-        tests.getFeatures(Fixture.VA_ROADS, true);
+        tests.getAllFeatures(Fixture.VA_ROADS, true);
     }
 
     @Test

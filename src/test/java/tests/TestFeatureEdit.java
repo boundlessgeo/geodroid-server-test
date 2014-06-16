@@ -4,7 +4,6 @@ import static com.jayway.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.*;
 import org.junit.Test;
 import support.BaseTest;
-import support.Tests;
 
 public class TestFeatureEdit extends BaseTest {
 

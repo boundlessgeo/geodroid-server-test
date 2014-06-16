@@ -14,7 +14,7 @@ public class TestData extends BaseTest {
 
     @Test
     public void testData() {
-        ResponseSpecification expect = expect();
+        ResponseSpecification expect = tests.givenWithReport().expect();
         for (DataSet df: activeFixture().allDataSets()) {
             expect.body(df.name, hasEntry("type", df.type.toString().toLowerCase()));
         }

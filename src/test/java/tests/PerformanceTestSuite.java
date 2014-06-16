@@ -8,7 +8,7 @@ import support.BaseTest;
 import support.Fixture;
 import support.Runner;
 
-@RunWith(Runner.BlockRunner.class)
+@RunWith(Runner.Block.class)
 public class PerformanceTestSuite extends BaseTest {
 
     @ClassRule
@@ -27,21 +27,21 @@ public class PerformanceTestSuite extends BaseTest {
     @Test
     public void testPerformanceGpkgPoints() throws Exception {
         for (int i = 0; i < 10; i++) {
-            tests.getFeatures(Fixture.VA_PLACES, true);
+            tests.getAllFeatures(Fixture.VA_PLACES, true);
         }
     }
 
     @Test
     public void testPerformanceGpkgMultiPoly() throws Exception {
         for (int i = 0; i < 10; i++) {
-            tests.getFeatures(Fixture.VA_PARKS, true);
+            tests.getAllFeatures(Fixture.VA_PARKS, true);
         }
     }
 
     @Test
     public void testPerformanceGpkgLine() throws Exception {
         for (int i = 0; i < 10; i++) {
-            tests.getFeatures(Fixture.VA_ROADS, true);
+            tests.getAllFeatures(Fixture.VA_ROADS, true);
         }
     }
 

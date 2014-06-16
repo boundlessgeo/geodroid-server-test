@@ -3,7 +3,6 @@ package tests;
 import static com.jayway.restassured.RestAssured.given;
 import org.junit.Test;
 import support.BaseTest;
-import support.Tests;
 
 public class TestFeatureDelete extends BaseTest {
 

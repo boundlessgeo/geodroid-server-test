@@ -7,7 +7,6 @@ import java.util.List;
 import static org.hamcrest.Matchers.equalTo;
 import org.junit.Test;
 import support.BaseTest;
-import support.Tests;
 
 public class TestSchemaCreate extends BaseTest {
 
@@ -28,7 +27,7 @@ public class TestSchemaCreate extends BaseTest {
         route = "/data/scratch/widgets";
         given().expect()
             .body("name", equalTo("widgets"))
-            .body("schema.fid", equalTo("String"))
+            .body("schema.fid", equalTo("Integer"))
             .body("schema.geometry", equalTo("Point"))
                 .get(route);
     }

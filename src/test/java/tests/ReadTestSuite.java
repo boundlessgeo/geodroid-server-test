@@ -9,7 +9,8 @@ import support.BaseTest;
 //@RunWith(Runner.SuiteRunner.class)
 @SuiteClasses({TestRead.class, TestData.class, TestDataEndPoint.class,
     TestFeatureOutputPNG.class, TestFeatureOutputJSON.class,
-    TestFeatureGetByID.class, TestFeatureOffsetLimit.class})
+    TestFeatureGetByID.class, TestFeatureOffsetLimit.class , TestFilters.class,
+    TestWMS.class})
 public class ReadTestSuite extends BaseTest {
 
 }

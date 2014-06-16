@@ -8,7 +8,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasItems;
 import org.junit.Test;
 import support.BaseTest;
-import support.Tests;
 
 public class TestFeatureCreate extends BaseTest {
 
