@@ -124,7 +124,7 @@ public class Tests {
         assertTrue(isJPEG(resp.asInputStream()));
     }
 
-    public byte[] getFeatureAsImage(DataSet dataSet, String style, String... queryPairs) throws IOException {
+    public byte[] getFeatureAsImage(DataSet dataSet, String style, Object... queryPairs) throws IOException {
         // allow an empty style to signify none
         String route = style == null || style.length() == 0
                 ? "/features/{parent}/{name}.png"
@@ -143,7 +143,7 @@ public class Tests {
         return data;
     }
 
-    public byte[] getWMSImage(String srs, String style, String bbox, int width, int height, DataSet... dataSets) throws IOException {
+    public byte[] getWMSImage(String filter, String srs, String style, String bbox, int width, int height, DataSet... dataSets) throws IOException {
         String route = "/wms?SERVICE=WMS&FORMAT=image/png&VERSION=1.3.0&REQUEST=GetMap";
         String layers = "";
         for (DataSet ds: dataSets) {
@@ -156,7 +156,10 @@ public class Tests {
         Response resp = tests.givenWithRequestReport().get(route);
         assertEquals(200, resp.getStatusCode());
         byte[] data = IOUtils.toByteArray(resp.asInputStream());
-        assertTrue("Expected a PNG", isPNG(new ByteArrayInputStream(data)));
+        boolean gotPng = isPNG(new ByteArrayInputStream(data));
+        if (!gotPng) {
+            fail("expected a PNG, got " + new String(data));
+        }
         StringBuilder buf = new StringBuilder("wms-");
         for (int i = 0; i < dataSets.length; i++) {
             buf.append(dataSets[i].name).append('-');
@@ -168,7 +171,9 @@ public class Tests {
             buf.append('-').append(style.replace(",", "_"));
         }
         buf.append(".png");
-        reporter.reportImage(buf.toString(), data);
+        if (reporter != null) {
+            reporter.reportImage(buf.toString(), data);
+        }
         return data;
     }
 

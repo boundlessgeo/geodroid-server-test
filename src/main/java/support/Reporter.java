@@ -282,12 +282,13 @@ public class Reporter extends RunListener {
 
         @Override
         public void startTest(String testName) throws Exception {
+            System.out.println("startTest " + testName);
             writer = writers.get(testName);
             if (writer == null) {
                 writers.put(testName, writer = new PrintWriter(new File(baseDir, testName + ".csv")));
                 writer.write("timestamp,elapsed,responseCode,success,URL");
+                writer.println();
             }
-            writer.println();
         }
 
         @Override

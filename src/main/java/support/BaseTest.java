@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.List;
 import org.junit.BeforeClass;
+import org.junit.ClassRule;
+import org.junit.Rule;
 import org.junit.rules.TestRule;
 import org.junit.runner.Description;
 import org.junit.runners.model.Statement;
@@ -12,7 +14,7 @@ import org.junit.runners.model.Statement;
 /**
  *
  */
-public class BaseTest {
+public abstract class BaseTest {
 
     protected static Tests tests = new Tests();
 
@@ -36,6 +38,10 @@ public class BaseTest {
 
     public static String dequote(String json) {
         return json.replaceAll("'", "\"");
+    }
+
+    public abstract static class Performance extends BaseTest {
+
     }
 
     /**

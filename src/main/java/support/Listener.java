@@ -7,9 +7,9 @@ import org.junit.runner.notification.Failure;
 import org.junit.runner.notification.RunListener;
 
 /**
- * Due to the way Junit/Maven work, this is an ugly singleton class. Surefire
- * will instantiate the class before any test is run. As tests are not run in
- * parallel, there should be no concurrency issues.
+ * Due to the way Junit/Maven works, this has been implemented as an ugly
+ * singleton class. As tests are not run in
+ * parallel, there should be no concurrency issues...
  */
 public class Listener extends RunListener {
 

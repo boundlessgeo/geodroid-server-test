@@ -8,6 +8,9 @@ import org.junit.runners.model.RunnerBuilder;
 
 public class Runner {
 
+    /**
+     * This runner allows running a test class with a Listener.
+     */
     public static class Block extends BlockJUnit4ClassRunner {
 
         public Block(Class<?> klass) throws InitializationError {
@@ -24,6 +27,9 @@ public class Runner {
 
     }
 
+    /**
+     * This runner allows running a test suite with a Listener.
+     */
     public static class Suite extends org.junit.runners.Suite {
 
         public Suite(Class<?> klass, RunnerBuilder builder) throws InitializationError {
