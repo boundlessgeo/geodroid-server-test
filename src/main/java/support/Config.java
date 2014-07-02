@@ -119,11 +119,13 @@ public class Config {
             }
         }
 
-        String fixture = user.getProperty(PROP_FIXTURE, "V2");
+        String fixture = user.getProperty(PROP_FIXTURE, "V3");
         if ("V1".equals(fixture)) {
             activeFixture = Fixture.V1;
         } else if ("V2".equals(fixture)) {
             activeFixture = Fixture.V2;
+        } else if ("V3".equals(fixture)) {
+            activeFixture = Fixture.V3;
         } else {
             System.out.println("invalid fixture specifier : " + fixture);
         }

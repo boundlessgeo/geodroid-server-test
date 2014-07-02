@@ -97,6 +97,10 @@ public class DataSet {
         return new DataSet(TopLevelType.WORKSPACE, Driver.GEOPACKAGE, DataType.VECTOR, name);
     }
 
+    static DataSet raster(String name) {
+        return new DataSet(TopLevelType.WORKSPACE, Driver.RASTER, DataType.RASTER, name);
+    }
+
     static DataSet tiles(String name) {
         return new DataSet(TopLevelType.WORKSPACE, Driver.GEOPACKAGE, DataType.TILES, name);
     }
@@ -116,12 +120,12 @@ public class DataSet {
 
     public static enum Driver {
 
-        GEOPACKAGE, GEOJSON, MBTILES
+        GEOPACKAGE, GEOJSON, MBTILES, RASTER
     }
 
     public static enum DataType {
 
-        VECTOR, TILES
+        VECTOR, TILES, RASTER
     }
 
     public String toString() {

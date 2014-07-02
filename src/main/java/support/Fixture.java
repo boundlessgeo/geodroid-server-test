@@ -51,9 +51,12 @@ public class Fixture {
     public static final DataSet GUN_DEATHS;
     public static final DataSet MEDFORD_PARKS_MEDFORD_PARKS;
     public static final DataSet MEDFORD_PARKS;
+    public static final DataSet DEM;
+    public static final DataSet USA_MERC;
 
     static final Fixture V1;
     static final Fixture V2;
+    static final Fixture V3;
 
     private final String url;
     private final DataSet[] datasets;
@@ -135,6 +138,11 @@ public class Fixture {
                     MEDFORD_PARKS_MEDFORD_PARKS = DataSet.vector("Medford_Parks").
                             expectFeatureCount(88)
             )
+        );
+        V3 = Fixture.url("http://data.opengeo.org/geodroid/geodroid-test-data3.zip",
+            NE1, VA, STATES, GEOGRAPHY, GUN_DEATHS, MEDFORD_PARKS,
+            DEM = DataSet.workspace("dem", DataSet.raster("dem")),
+            USA_MERC = DataSet.workspace("usa-merc", DataSet.raster("usa-merc"))
         );
     }
 
